@@ -6,14 +6,13 @@ import { Home } from './pages/Home';
 import { Product } from './pages/Product';
 import { Cart } from './pages/Cart';
 import { NotFound } from './pages/NotFound';
-import { GlobalProvider } from './utils/GlobalProvider';
 import PrimarySearchAppBar from './components/AppBar';
 
 export const App: React.FC = () => {
   return (
-    <GlobalProvider>
+    <>
       <PrimarySearchAppBar />
-      <Container sx={{ padding: 8 }}>
+      <Container sx={{ paddingX: 3, paddingY: 8 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
@@ -22,6 +21,6 @@ export const App: React.FC = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
-    </GlobalProvider>
+    </>
   );
 };

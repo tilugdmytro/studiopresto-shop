@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -8,9 +8,10 @@ import {
   Box,
 } from '@mui/material';
 import { Product } from '../types/Product';
-import { GlobalContext } from '../utils/GlobalProvider';
 import MyButton from '../molecules/MyButton';
 import CustomLink from '../molecules/CustomLink';
+import { useAppDispatch } from '../app/hooks';
+import { addCartItem } from '../redux/cartSlice';
 
 type Props = {
   product: Product;
@@ -20,7 +21,12 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
   const {
     id, title, price, category, image,
   } = product;
-  const { addCartItem } = useContext(GlobalContext);
+
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addCartItem(product));
+  };
 
   return (
     <Card
@@ -103,7 +109,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           label="Add to Cart"
           variant="contained"
           color="primary"
-          onClick={() => addCartItem(product.id)}
+          onClick={handleAddToCart}
         />
       </CardActions>
     </Card>

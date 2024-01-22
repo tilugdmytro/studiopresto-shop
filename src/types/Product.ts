@@ -9,3 +9,7 @@ export interface Product {
     rate: number;
   };
 }
+
+export interface ProductWithQuantity extends Product {
+  quantity: number;
+}

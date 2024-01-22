@@ -1,21 +1,72 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Product, ProductWithQuantity } from '../types/Product';
 
-interface CartItem {
-  productId: string;
+interface CartState {
+  cartProducts: ProductWithQuantity[];
 }
+
+const initialState: CartState = {
+  cartProducts: [],
+};
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: [] as CartItem[],
+  initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<CartItem>) => {
-      state.push(action.payload);
+    addCartItem: (state, action: PayloadAction<Product>) => {
+      const { id } = action.payload;
+      const existingProduct = state.cartProducts.find((product) => product.id === id);
+
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+      } else {
+        state.cartProducts.push({ ...action.payload, quantity: 1 });
+      }
     },
-    removeFromCart: (state, action) => {
-      return state.filter(productId => productId !== action.payload);
+
+    increaseQuantity: (state, action: PayloadAction<number>) => {
+      const product = state.cartProducts.find((p) => p.id === action.payload);
+      if (product) {
+        product.quantity += 1;
+      }
+    },
+
+    decreaseQuantity: (state, action: PayloadAction<number>) => {
+      const product = state.cartProducts.find((p) => p.id === action.payload);
+      if (product && product.quantity > 1) {
+        product.quantity -= 1;
+      }
+    },
+
+    removeCartItem: (state, action: PayloadAction<number>) => {
+      state.cartProducts = state.cartProducts.filter((product) => product.id !== action.payload);
+    },
+
+    clearCart: (state) => {
+      state.cartProducts = [];
+    },
+
+    updateCartItemQuantity: (
+      state,
+      action: PayloadAction<{ id: number; newQuantity: number }>
+    ) => {
+      const { id, newQuantity } = action.payload;
+      const item = state.cartProducts.find((item) => item.id === id);
+
+      if (item) {
+        item.quantity = newQuantity;
+      }
     },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const {
+  addCartItem,
+  increaseQuantity,
+  decreaseQuantity,
+  removeCartItem,
+  clearCart,
+  updateCartItemQuantity,
+} = cartSlice.actions;
+
 export default cartSlice.reducer;

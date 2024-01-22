@@ -1,19 +1,25 @@
 /* eslint-disable no-console */
-import React, { useContext, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Grid } from '@mui/material';
+import { Grid, Typography, Box, LinearProgress } from '@mui/material';
 import { ProductCard } from './ProductCard';
-import { GlobalContext } from '../utils/GlobalProvider';
 import PaginationComponent from '../molecules/Pagination';
+import { useAppSelector } from '../app/hooks';
 
 const ProductList = () => {
-  const {
-    products, currentPage, setCurrentPage,
-  } = useContext(GlobalContext);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { products, error, isLoading } = useAppSelector(
+    (state) => state.products
+  );
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query') || '';
   const category = searchParams.get('category') || '';
   const itemsPerPage = 6;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, query]);
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -25,8 +31,9 @@ const ProductList = () => {
 
     // Query filter
     if (query) {
-      result = result.filter((product) => product.title
-        .toLowerCase().includes(query.toLowerCase()));
+      result = result.filter((product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      );
     }
 
     return result;
@@ -43,17 +50,31 @@ const ProductList = () => {
   const endIndex = startIndex + itemsPerPage;
   const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
-  console.log(paginatedProducts);
-
   return (
     <div>
-      <Grid container spacing={3}>
-        {paginatedProducts.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
-            <ProductCard product={product} />
-          </Grid>
-        ))}
-      </Grid>
+      {error && (
+        <Typography variant="h6" gutterBottom color="error">
+          Error: {error}
+        </Typography>
+      )}
+      {isLoading && paginatedProducts.length === 0 && (
+        <Box sx={{ width: '100%' }}>
+          <LinearProgress />
+        </Box>
+      )}
+      {!isLoading && !error && paginatedProducts.length === 0 ? (
+        <Typography variant="h6" gutterBottom>
+          No matching results found...
+        </Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {paginatedProducts.map((product) => (
+            <Grid item key={product.id} xs={12} sm={6} md={4}>
+              <ProductCard product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
       {totalItems > itemsPerPage && (
         <PaginationComponent
           count={totalPages}

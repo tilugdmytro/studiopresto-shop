@@ -1,29 +1,23 @@
-/* eslint-disable no-console */
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ProductList from '../components/ProductList';
-import { GlobalContext } from '../utils/GlobalProvider';
-import { getAllProducts } from '../api/getProducts';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { fetchProducts } from '../redux/productsSlice';
 
 export const Home: React.FC = () => {
-  const { setProducts } = useContext(GlobalContext);
+  const dispatch = useAppDispatch();
+  const { products } = useAppSelector(state => state.products)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllProducts();
-
-        setProducts(data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
+    if(products.length > 0) {
+      return
     };
-
-    fetchData();
-  }, []);
+  
+    dispatch(fetchProducts());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <div>
-      <h2>Home</h2>
       <ProductList />
     </div>
   );

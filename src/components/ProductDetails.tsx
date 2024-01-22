@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Typography,
@@ -12,13 +12,15 @@ import {
   responsiveFontSizes,
   ThemeProvider,
   IconButton,
+  LinearProgress,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Product } from '../types/Product';
 import { getProductById } from '../api/getProducts';
-import { GlobalContext } from '../utils/GlobalProvider';
 import MyButton from '../molecules/MyButton';
 import CustomLink from '../molecules/CustomLink';
+import { useAppDispatch } from '../app/hooks';
+import { addCartItem } from '../redux/cartSlice';
 
 let theme = createTheme({});
 
@@ -27,7 +29,14 @@ theme = responsiveFontSizes(theme);
 const ProductDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-  const { addCartItem } = useContext(GlobalContext);
+
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    if (product !== null) {
+      dispatch(addCartItem(product));
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,15 +52,17 @@ const ProductDetails = () => {
     };
 
     fetchData();
-  }, []);
+  }, [productId]);
 
   if (!product) {
-    return <Typography>Loading...</Typography>;
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
   }
 
-  const {
-    title, price, category, image, description, rating,
-  } = product;
+  const { title, price, category, image, description, rating } = product;
 
   return (
     <Box>
@@ -82,31 +93,24 @@ const ProductDetails = () => {
             >
               {title}
             </Typography>
-            <Typography variant="h5" gutterBottom>
-              Category:
-              {' '}
-              {category}
+            <Typography variant="h5" color="text.secondary" gutterBottom>
+              Category: {category}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Rating:
-              {' '}
-              {rating.rate}
+              Rating: {rating.rate}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Price: $
-              {price}
+              Price: ${price}
             </Typography>
-            <Typography variant="h5" color="text.secondary" gutterBottom>
-              <strong>Description:</strong>
-              {' '}
-              {description}
+            <Typography variant="h5" gutterBottom>
+              <strong>Description:</strong> {description}
             </Typography>
             <CardActions sx={{ justifyContent: 'center' }}>
               <MyButton
                 label="Add to Cart"
                 variant="contained"
                 color="primary"
-                onClick={() => addCartItem(product.id)}
+                onClick={handleAddToCart}
               />
             </CardActions>
           </CardContent>

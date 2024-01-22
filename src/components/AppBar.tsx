@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -12,9 +12,9 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { GlobalContext } from '../utils/GlobalProvider';
 import SideBar from './SideBar';
 import CustomLink from '../molecules/CustomLink';
+import { useAppSelector } from '../app/hooks';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,7 +58,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { cart } = useContext(GlobalContext);
+  const { cartProducts } = useAppSelector(state => state.cart)
   const [drawerOpen, setDrawerOpen] = useState(false);
   const query = searchParams.get('query') || '';
 
@@ -85,11 +85,11 @@ export default function PrimarySearchAppBar() {
   };
 
   const getTotalQuantity = () => {
-    return cart.reduce((total, item) => total + (item.quantity || 0), 0);
+    return cartProducts.reduce((total, item) => total + (item.quantity || 0), 0);
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, mb: 3 }}>
       <AppBar position="fixed">
         <Toolbar>
           {isHomePage && (

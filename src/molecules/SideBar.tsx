@@ -9,14 +9,14 @@ import {
   RadioGroup,
   FormControlLabel,
 } from '@mui/material';
-import MyButton from '../molecules/MyButton';
+import MyButton from '../atoms/MyButton';
 
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
-const SideBar: React.FC<Props> = ({ open, onClose }) => {
+export const SideBar: React.FC<Props> = ({ open, onClose }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -71,5 +71,3 @@ const SideBar: React.FC<Props> = ({ open, onClose }) => {
     </Drawer>
   );
 };
-
-export default SideBar;

@@ -7,25 +7,25 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import { Product } from '../types/Product';
-import MyButton from '../molecules/MyButton';
-import CustomLink from '../molecules/CustomLink';
-import { useAppDispatch } from '../app/hooks';
-import { addCartItem } from '../redux/cartSlice';
+import { Product } from '../../types/Product';
+import MyButton from '../../atoms/MyButton';
+import CustomLink from '../../atoms/CustomLink';
+import { useAppDispatch } from '../../app/hooks';
+import { addCartItem } from '../../redux/cartSlice';
+import { showSuccessNotification } from '../../utils/notificationService';
 
 type Props = {
   product: Product;
 };
 
 export const ProductCard: React.FC<Props> = ({ product }) => {
-  const {
-    id, title, price, category, image,
-  } = product;
+  const { id, title, price, category, image } = product;
 
   const dispatch = useAppDispatch();
 
   const handleAddToCart = () => {
     dispatch(addCartItem(product));
+    showSuccessNotification('Product added to cart');
   };
 
   return (
@@ -87,9 +87,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
               opacity: 0.6,
             }}
           >
-            <strong>Category: </strong>
-            {' '}
-            {category}
+            <strong>Category: </strong> {category}
           </Typography>
           <Typography
             variant="body1"
@@ -97,10 +95,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
               mb: 1,
             }}
           >
-            <strong>Price:</strong>
-            {' '}
-            $
-            {price}
+            <strong>Price:</strong> ${price}
           </Typography>
         </CardContent>
       </Box>

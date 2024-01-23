@@ -6,7 +6,7 @@ import { Home } from './pages/Home';
 import { Product } from './pages/Product';
 import { Cart } from './pages/Cart';
 import { NotFound } from './pages/NotFound';
-import PrimarySearchAppBar from './components/AppBar';
+import PrimarySearchAppBar from './molecules/AppBar';
 
 export const App: React.FC = () => {
   return (

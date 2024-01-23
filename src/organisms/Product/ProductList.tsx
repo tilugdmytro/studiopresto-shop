@@ -1,12 +1,11 @@
-/* eslint-disable no-console */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Grid, Typography, Box, LinearProgress } from '@mui/material';
 import { ProductCard } from './ProductCard';
-import PaginationComponent from '../molecules/Pagination';
-import { useAppSelector } from '../app/hooks';
+import { PaginationComponent } from '../../atoms/Pagination';
+import { useAppSelector } from '../../app/hooks';
 
-const ProductList = () => {
+export const ProductList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { products, error, isLoading } = useAppSelector(
@@ -24,12 +23,10 @@ const ProductList = () => {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Category filter
     if (category) {
       result = result.filter((product) => product.category === category);
     }
 
-    // Query filter
     if (query) {
       result = result.filter((product) =>
         product.title.toLowerCase().includes(query.toLowerCase())
@@ -87,5 +84,3 @@ const ProductList = () => {
     </div>
   );
 };
-
-export default ProductList;

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
@@ -12,8 +11,8 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SideBar from './SideBar';
-import CustomLink from '../molecules/CustomLink';
+import { SideBar } from './SideBar';
+import CustomLink from '../atoms/CustomLink';
 import { useAppSelector } from '../app/hooks';
 
 const Search = styled('div')(({ theme }) => ({
@@ -58,7 +57,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { cartProducts } = useAppSelector(state => state.cart)
+  const { cartProducts } = useAppSelector((state) => state.cart);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const query = searchParams.get('query') || '';
 
@@ -85,7 +84,10 @@ export default function PrimarySearchAppBar() {
   };
 
   const getTotalQuantity = () => {
-    return cartProducts.reduce((total, item) => total + (item.quantity || 0), 0);
+    return cartProducts.reduce(
+      (total, item) => total + (item.quantity || 0),
+      0
+    );
   };
 
   return (

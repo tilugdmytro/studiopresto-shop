@@ -1,16 +1,21 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product } from '../types/Product';
 import { getAllProducts } from '../api/getProducts';
+import { showErrorNotification } from '../utils/notificationService';
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_, thunkApi) => {
-  try {
-    const data = await getAllProducts();
-    return data;
-  } catch (error: any) {
-    console.error(error)
-    return thunkApi.rejectWithValue(error.message);
+export const fetchProducts = createAsyncThunk(
+  'products/fetchProducts',
+  async (_, thunkApi) => {
+    try {
+      const data = await getAllProducts();
+      return data;
+    } catch (error: any) {
+      console.error(error);
+      showErrorNotification('Something went wrong');
+      return thunkApi.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 interface ProductsState {
   products: Product[];

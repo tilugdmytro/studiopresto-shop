@@ -7,7 +7,7 @@ interface Props extends PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const PaginationComponent: React.FC<Props> = ({ onPageChange, ...paginationProps }) => {
+export const PaginationComponent: React.FC<Props> = ({ onPageChange, ...paginationProps }) => {
   const handleChange = (_: React.ChangeEvent<unknown>, page: number) => {
     onPageChange(page);
   };
@@ -18,5 +18,3 @@ const PaginationComponent: React.FC<Props> = ({ onPageChange, ...paginationProps
     </Stack>
   );
 };
-
-export default PaginationComponent;

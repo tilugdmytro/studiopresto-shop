@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -15,18 +14,22 @@ import {
   LinearProgress,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Product } from '../types/Product';
-import { getProductById } from '../api/getProducts';
-import MyButton from '../molecules/MyButton';
-import CustomLink from '../molecules/CustomLink';
-import { useAppDispatch } from '../app/hooks';
-import { addCartItem } from '../redux/cartSlice';
+import { Product } from '../../types/Product';
+import { getProductById } from '../../api/getProducts';
+import MyButton from '../../atoms/MyButton';
+import CustomLink from '../../atoms/CustomLink';
+import { useAppDispatch } from '../../app/hooks';
+import { addCartItem } from '../../redux/cartSlice';
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from '../../utils/notificationService';
 
 let theme = createTheme({});
 
 theme = responsiveFontSizes(theme);
 
-const ProductDetails = () => {
+export const ProductDetails: React.FC = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
 
@@ -35,6 +38,7 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (product !== null) {
       dispatch(addCartItem(product));
+      showSuccessNotification('Product added to cart!');
     }
   };
 
@@ -48,6 +52,7 @@ const ProductDetails = () => {
         }
       } catch (error) {
         console.error('Error fetching products:', error);
+        showErrorNotification('Something went wrong');
       }
     };
 
@@ -119,5 +124,3 @@ const ProductDetails = () => {
     </Box>
   );
 };
-
-export default ProductDetails;

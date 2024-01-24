@@ -10,11 +10,16 @@ import './index.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const isGitHubPages =
+  process.env.NODE_ENV === 'production' && process.env.PUBLIC_URL;
+
+const basename = isGitHubPages ? '/studiopresto-shop' : '/';
+
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename={basename}>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <App />

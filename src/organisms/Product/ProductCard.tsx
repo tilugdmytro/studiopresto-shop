@@ -8,11 +8,12 @@ import {
   Box,
 } from '@mui/material';
 import { Product } from '../../types/Product';
-import MyButton from '../../atoms/MyButton';
+import Button from '../../molecules/PrimaryButton';
 import CustomLink from '../../atoms/CustomLink';
 import { useAppDispatch } from '../../app/hooks';
 import { addCartItem } from '../../redux/cartSlice';
 import { showSuccessNotification } from '../../utils/notificationService';
+import { useLocation } from 'react-router-dom';
 
 type Props = {
   product: Product;
@@ -20,6 +21,7 @@ type Props = {
 
 export const ProductCard: React.FC<Props> = ({ product }) => {
   const { id, title, price, category, image } = product;
+  const location = useLocation();
 
   const dispatch = useAppDispatch();
 
@@ -39,16 +41,11 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         '&:hover': {
           transform: 'scale(1.04)',
           boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px;',
-          '& .title': {
-            whiteSpace: 'normal',
-            overflow: 'visible',
-            textOverflow: 'clip',
-          },
         },
       }}
     >
       <Box>
-        <CustomLink to={`/product/${id}`}>
+        <CustomLink to={`/product/${id}`} state={{from: location}}>
           <Box sx={{ padding: '10px' }}>
             <CardMedia
               component="img"
@@ -70,11 +67,6 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
-                '&:hover': {
-                  whiteSpace: 'normal',
-                  overflow: 'visible',
-                  textOverflow: 'clip',
-                },
               }}
             >
               {title}
@@ -100,7 +92,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         </CardContent>
       </Box>
       <CardActions sx={{ marginBottom: '10px', alignSelf: 'center' }}>
-        <MyButton
+        <Button
           label="Add to Cart"
           variant="contained"
           color="primary"

@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import emailjs from 'emailjs-com';
 import { Box, TextField } from '@mui/material';
 import { FormData } from '../../types/FormData';
-import MyButton from '../../atoms/MyButton';
+import Button from '../../molecules/PrimaryButton';
 
 interface CartFormProps {
   onSubmit: SubmitHandler<FormData>;
@@ -87,7 +87,7 @@ export const CartForm: React.FC<CartFormProps> = ({ onSubmit }) => {
             formState.errors.phone ? String(formState.errors.phone.message) : ''
           }
         />
-        <MyButton
+        <Button
           label="Buy"
           type="submit"
           variant="contained"

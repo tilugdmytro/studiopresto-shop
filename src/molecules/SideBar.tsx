@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -9,7 +8,8 @@ import {
   RadioGroup,
   FormControlLabel,
 } from '@mui/material';
-import MyButton from '../atoms/MyButton';
+import Button from './PrimaryButton';
+import { getAllCategories } from '../api/getProducts';
 
 type Props = {
   open: boolean;
@@ -19,26 +19,20 @@ type Props = {
 export const SideBar: React.FC<Props> = ({ open, onClose }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const category = searchParams.get('category') || '';
 
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products/categories')
-      .then((res) => res.json())
-      .then((json) => setCategories(json));
+    getAllCategories().then((json) => setCategories(json));
   }, []);
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedCategory(event.target.value);
     const params = new URLSearchParams(searchParams);
-
     params.set('category', event.target.value);
     setSearchParams(params);
   };
 
   const handleClearCategory = () => {
-    setSelectedCategory('');
     const params = new URLSearchParams(searchParams);
-
     params.delete('category');
     setSearchParams(params);
   };
@@ -50,7 +44,7 @@ export const SideBar: React.FC<Props> = ({ open, onClose }) => {
           Categories
         </Typography>
         <RadioGroup
-          value={selectedCategory || ''}
+          value={category || ''}
           onChange={handleCategoryChange}
         >
           {categories.map((category) => (
@@ -62,7 +56,7 @@ export const SideBar: React.FC<Props> = ({ open, onClose }) => {
             />
           ))}
         </RadioGroup>
-        <MyButton
+        <Button
           label="Clear Filter"
           variant="outlined"
           onClick={handleClearCategory}

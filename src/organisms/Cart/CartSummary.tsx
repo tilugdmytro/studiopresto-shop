@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Box, Typography, Divider } from '@mui/material';
-import MyButton from '../../atoms/MyButton';
+import Button from '../../molecules/PrimaryButton';
 import { ProductWithQuantity } from '../../types/Product';
 import { ModalWindow } from '../../molecules/ModalWindow';
 import { SubmitHandler } from 'react-hook-form';
@@ -37,18 +37,14 @@ export const CartSummary: React.FC<CartSummaryProps> = ({ cartProducts }) => {
     return totalItems;
   };
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const toggleModal = () => {
+    setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
   };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data, cartProducts);
     dispatch(clearCart());
-    handleCloseModal();
+    toggleModal();
 
     showSuccessNotification('Purchase successful!');
   };
@@ -85,16 +81,16 @@ export const CartSummary: React.FC<CartSummaryProps> = ({ cartProducts }) => {
 
           <Divider sx={{ my: 2, width: '50%' }} />
 
-          <MyButton
+          <Button
             label="Checkout"
             variant="contained"
             color="primary"
-            onClick={handleModalOpen}
+            onClick={toggleModal}
           />
         </Box>
       </Card>
       {isModalOpen && (
-        <ModalWindow onClose={handleCloseModal} isModalOpen={isModalOpen}>
+        <ModalWindow onClose={toggleModal} isModalOpen={isModalOpen}>
           <Box
             sx={{
               width: isSmallScreen ? '100%' : '500px',

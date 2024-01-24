@@ -1,12 +1,16 @@
 import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 
-interface MyButtonProps extends ButtonProps {
+interface PrimaryButtonProps extends ButtonProps {
   label: string;
   onClick?: () => void;
 }
 
-const MyButton: React.FC<MyButtonProps> = ({ label, onClick, ...buttonProps }) => {
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({
+  label,
+  onClick,
+  ...buttonProps
+}) => {
   return (
     <Button onClick={onClick} {...buttonProps}>
       {label}
@@ -14,4 +18,4 @@ const MyButton: React.FC<MyButtonProps> = ({ label, onClick, ...buttonProps }) =
   );
 };
 
-export default MyButton;
+export default PrimaryButton;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import {
   Typography,
   Box,
@@ -16,7 +16,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Product } from '../../types/Product';
 import { getProductById } from '../../api/getProducts';
-import MyButton from '../../atoms/MyButton';
+import Button from '../../molecules/PrimaryButton';
 import CustomLink from '../../atoms/CustomLink';
 import { useAppDispatch } from '../../app/hooks';
 import { addCartItem } from '../../redux/cartSlice';
@@ -32,6 +32,9 @@ theme = responsiveFontSizes(theme);
 export const ProductDetails: React.FC = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
+  const location = useLocation();
+
+  const backLinkHref = location.state?.from ?? "/";
 
   const dispatch = useAppDispatch();
 
@@ -71,7 +74,7 @@ export const ProductDetails: React.FC = () => {
 
   return (
     <Box>
-      <CustomLink to="/">
+      <CustomLink to={backLinkHref}>
         <IconButton color="primary">
           <ArrowBackIcon />
         </IconButton>
@@ -111,7 +114,7 @@ export const ProductDetails: React.FC = () => {
               <strong>Description:</strong> {description}
             </Typography>
             <CardActions sx={{ justifyContent: 'center' }}>
-              <MyButton
+              <Button
                 label="Add to Cart"
                 variant="contained"
                 color="primary"

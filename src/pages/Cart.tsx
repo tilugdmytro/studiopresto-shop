@@ -4,7 +4,7 @@ import { useAppSelector } from '../app/hooks';
 import { CartItem } from '../organisms/Cart/CartItem';
 import { CartSummary } from '../organisms/Cart/CartSummary';
 import { useNavigate } from 'react-router-dom';
-import MyButton from '../atoms/MyButton';
+import Button from '../molecules/PrimaryButton';
 
 export const Cart: React.FC = () => {
   const { cartProducts } = useAppSelector((state) => state.cart);
@@ -30,7 +30,7 @@ export const Cart: React.FC = () => {
           <Typography variant="h2" sx={{ textAlign: 'center' }}>
             Your cart is empty...
           </Typography>
-          <MyButton
+          <Button
             label="Go Shopping!"
             onClick={navigateToHome}
             variant="contained"
